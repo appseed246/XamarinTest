@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Xamarin.Forms;
+using QuickType;
 
 namespace XamarinTest
 {
     public partial class MainPage : ContentPage
     {
         public ListView listView;
-        public List<QiitaArticleEntity> articleList;
-        private QiitaAPI api = new QiitaAPI();
+        public List<ItemClass> articleList;
+        QiitaAPI api = new QiitaAPI();
 
         public MainPage()
         {
@@ -31,21 +32,21 @@ namespace XamarinTest
             ToolbarItems.Add(new ToolbarItem
             {
                 Text = "更新",
-                Command = new Command(() =>
+                Command = new Command(async () =>
                 {
                     // リストをクリアしてから更新
                     listView.ItemsSource = new List<String>();
-                    fetchArticles();
+                    await FetchArticles();
                 })
             });
 
-            fetchArticles();
+            FetchArticles();
 
         }
 
         private void InitListViewSetting()
         {
-            
+
             listView = new ListView
             {
                 RowHeight = 60
@@ -61,14 +62,15 @@ namespace XamarinTest
 
             // Refresh-To-Swipeを有効にする
             listView.IsPullToRefreshEnabled = true;
-            listView.Refreshing += async (sender, e) => {
-                await fetchArticles();
+            listView.Refreshing += async (sender, e) =>
+            {
+                await FetchArticles();
                 listView.IsRefreshing = false;
             };
 
         }
 
-        async Task fetchArticles()
+        async Task FetchArticles()
         {
 
             Debug.WriteLine("--- fetch start ---");
@@ -79,7 +81,7 @@ namespace XamarinTest
 
                 var items = new List<String>();
 
-                foreach (QiitaArticleEntity value in articleList)
+                foreach (ItemClass value in articleList)
                 {
                     items.Add(value.Title);
                 }
