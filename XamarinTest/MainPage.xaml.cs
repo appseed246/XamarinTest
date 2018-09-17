@@ -1,100 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Diagnostics;
 using Xamarin.Forms;
-using QuickType;
 
 namespace XamarinTest
 {
     public partial class MainPage : ContentPage
     {
+
         public ListView listView;
-        public List<ItemClass> articleList;
-        QiitaAPI api = new QiitaAPI();
+        private QiitaAPI api = new QiitaAPI();
+        public List<QiitaArticleEntity> articleList;
+        public Command OnClick;
 
         public MainPage()
         {
+            this.BindingContext = new Command(
+                async () => await this.FetchArticles());
             InitializeComponent();
-            Title = "新着記事";
-
-            InitListViewSetting();
-
-            Content = new StackLayout
-            {
-                VerticalOptions = LayoutOptions.FillAndExpand,
-                Children = { listView }
-            };
-
-            // ツールバーに更新ボタンを追加
-            ToolbarItems.Add(new ToolbarItem
-            {
-                Text = "更新",
-                Command = new Command(async () =>
-                {
-                    // リストをクリアしてから更新
-                    listView.ItemsSource = new List<String>();
-                    await FetchArticles();
-                })
-            });
-
-            FetchArticles();
-
+            var nouse = this.FetchArticles();
         }
 
-        private void InitListViewSetting()
+        async Task OnClicked(object sender, EventArgs e)
         {
-
-            listView = new ListView
-            {
-                RowHeight = 60
-            };
-
-            // タイトルをタップして記事を開く
-            listView.ItemSelected += async (sender, e) =>
-            {
-                var index = (listView.ItemsSource as List<String>).IndexOf(e.SelectedItem as String);
-                var articleUrl = articleList[index].Url;
-                await Navigation.PushAsync(new ArticlePage(url: articleUrl));
-            };
-
-            // Refresh-To-Swipeを有効にする
-            listView.IsPullToRefreshEnabled = true;
-            listView.Refreshing += async (sender, e) =>
-            {
-                await FetchArticles();
-                listView.IsRefreshing = false;
-            };
-
+            await FetchArticles();
         }
 
+        async void OnSelect(object sender, SelectedItemChangedEventArgs e)
+        {
+            var index = (Articles.ItemsSource as List<String>).IndexOf(e.SelectedItem as String);
+            var articleUrl = articleList[index].Url;
+            await Navigation.PushAsync(new ArticlePage(articleUrl));
+        }
+
+        async Task Reload(object sender, EventArgs e)
+        {
+            await this.FetchArticles();
+            this.Articles.IsRefreshing = false;
+        }
+
+        // 非同期でデータ取得のメソッドを実行するメソッド
         async Task FetchArticles()
         {
 
-            Debug.WriteLine("--- fetch start ---");
-
             try
             {
+                // 取得したデータをListに設定
                 articleList = await api.AsyncGetWebAPIData();
-
                 var items = new List<String>();
-
-                foreach (ItemClass value in articleList)
-                {
-                    items.Add(value.Title);
-                }
-
-                listView.ItemsSource = items;
-
-                Debug.WriteLine("--- success ---");
-
+                System.Diagnostics.Debug.WriteLine("ababa");
+                articleList.ForEach(a => items.Add(a.Title));
+                this.Articles.BindingContext = items;
             }
+            // エラー表示処理
             catch (Exception ex)
             {
-                await DisplayAlert("Error", ex.Message.ToString(), "OK");
+                await DisplayAlert("Error", ex.Message, "OK");
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
+
         }
+
     }
 }

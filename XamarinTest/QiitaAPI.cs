@@ -1,34 +1,42 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
+using Xamarin.Forms;
+using System.Net.Http;
+using System.Runtime.Serialization.Json;
 using Newtonsoft.Json;
-using QuickType;
+
 
 namespace XamarinTest
 {
     public class QiitaAPI
     {
-        public List<ItemClass> articleList;
+        //public List<QiitaArticleEntity> articleList;
 
-        public static readonly string API_URL = "https://qiita.com//api/v2/items";
+        // QiitaAPIのURl
+        public string API_URL = "https://qiita.com//api/v2/items";
 
-        public async Task<List<ItemClass>> AsyncGetWebAPIData()
+        // データを取得するメソッド
+        public async Task<List<QiitaArticleEntity>> AsyncGetWebAPIData()
         {
-            // リスト作成
-            //articleList = new List<QiitaArticleEntity>();
-            articleList = new List<ItemClass>();
+            // Listの作成
+            //var articleList = new List<QiitaArticleEntity>();
+            // HttpClientの作成 
+            HttpClient httpClient = new HttpClient();
+            // 非同期でAPIからデータを取得
+            string result = await httpClient.GetStringAsync(API_URL);
+            // JSON形式のデータをデシリアライズ
+            var articleList = JsonConvert.DeserializeObject<List<QiitaArticleEntity>>(result);
 
-            // HTTPクライアント作成
-            var httpClient = new HttpClient();
-
-            var result =  await httpClient.GetStringAsync(API_URL);
-
-            articleList = JsonConvert.DeserializeObject<List<ItemClass>>(result);
-
-            // Listでデータを返す
+            // List でデータを返す
             return articleList;
         }
+    }
+
+    // QiitaApiから取得するデータのEntity
+    public class QiitaArticleEntity
+    {
+        public string Title { get; set; }
+        public string Url { get; set; }
     }
 }

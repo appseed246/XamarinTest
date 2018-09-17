@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:XamarinTest"
-             x:Class="XamarinTest.MainPage">
-    <StackLayout>
-        
+             xmlns:local="clr-namespace:XamarinTest" 
+             x:Class="XamarinTest.MainPage"
+             Title="新着記事">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Name="Bar"
+                     Text="更新"
+                     Command="{Binding}">
+            
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    <StackLayout VerticalOptions="FillAndExpand">
+        <StackLayout.Children>
+            <ListView x:Name="Articles" 
+                      RowHeight="60" 
+                      ItemsSource="{Binding}"
+                      ItemSelected="OnSelect"
+                      IsPullToRefreshEnabled="true"
+                      Refreshing="Reload"
+                      >
+            </ListView>
+        </StackLayout.Children>
     </StackLayout>
 </ContentPage>

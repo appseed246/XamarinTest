@@ -13,8 +13,8 @@ namespace XamarinTest
             {
                 Source = url
             };
-
             Content = webView;
+
         }
     }
 }
