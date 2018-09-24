@@ -8,7 +8,6 @@
         <ToolbarItem Name="Bar"
                      Text="更新"
                      Command="{Binding}">
-            
         </ToolbarItem>
     </ContentPage.ToolbarItems>
     <StackLayout VerticalOptions="FillAndExpand">
@@ -16,11 +15,18 @@
             <ListView x:Name="Articles" 
                       RowHeight="60" 
                       ItemsSource="{Binding}"
-                      ItemSelected="OnSelect"
+                      ItemTapped="OnTapped"
+                      ItemAppearing="OnLastItem"
                       IsPullToRefreshEnabled="true"
                       Refreshing="Reload"
                       >
             </ListView>
         </StackLayout.Children>
+        <StackLayout x:Name="Bottom"
+                     IsVisible="false"
+                     Padding="10">
+            <ActivityIndicator x:Name="indicator"
+                               IsRunning="true"/>
+        </StackLayout>
     </StackLayout>
 </ContentPage>

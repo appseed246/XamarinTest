@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Markdig;
+using Markdig.SyntaxHighlighting;
 
 using Xamarin.Forms;
 
@@ -7,14 +9,25 @@ namespace XamarinTest
 {
     public partial class ArticlePage : ContentPage
     {
+
         public ArticlePage(String url)
         {
-            var webView = new WebView
+            Content = new WebView
             {
                 Source = url
             };
-            Content = webView;
 
+        }
+
+        int PaddingSize() 
+        {
+            switch(Device.RuntimePlatform)
+            {
+                case Device.iOS:
+                    return 20;
+                default:
+                    return 0;
+            }
         }
     }
 }
