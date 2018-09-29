@@ -19,14 +19,45 @@
                       ItemAppearing="OnLastItem"
                       IsPullToRefreshEnabled="true"
                       Refreshing="Reload"
-                      >
+                      HasUnevenRows="true">
+                <ListView.ItemTemplate>
+                    <DataTemplate >
+                        <ViewCell>
+                            <StackLayout Orientation="Horizontal">
+                                <!-- アイコン部分 -->
+                                <StackLayout Margin="10">
+                                    <Image x:Name="UserIcon"
+                                           Source="{Binding ProfileImageUrl}"
+                                           Aspect="AspectFit"
+                                           HorizontalOptions="FillAndExpand"
+                                           WidthRequest="{Binding IconSize}"
+                                           HeightRequest="{Binding IconSize}"/>
+                                </StackLayout>
+                                <!-- 記事部分 -->
+                                <StackLayout Orientation="Vertical" Margin="10">
+                                    <Label Text="{Binding UserId, StringFormat='@{0}'}"
+                                           FontSize="Micro"
+                                           TextColor="Black"
+                                           HorizontalOptions="StartAndExpand"/>
+                                    <Label Text="{Binding Title}"
+                                           FontSize="Default"
+                                           HorizontalOptions="StartAndExpand"
+                                           TextColor="Black"/>
+                                    <Label Text="{Binding CreatedAt}"
+                                           HorizontalOptions="StartAndExpand"
+                                           FontSize="Small"
+                                           TextColor="Gray"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
             </ListView>
-        </StackLayout.Children>
-        <StackLayout x:Name="Bottom"
-                     IsVisible="false"
-                     Padding="10">
-            <ActivityIndicator x:Name="indicator"
-                               IsRunning="true"/>
+        <StackLayout x:Name="Bottom" IsVisible="false" Padding="10">
+            <StackLayout.Children>
+                <ActivityIndicator x:Name="indicator" IsRunning="true"/>
+            </StackLayout.Children>
         </StackLayout>
+        </StackLayout.Children>
     </StackLayout>
 </ContentPage>

@@ -14,6 +14,9 @@ namespace XamarinTest
         public Command OnClick;
         private int pageNumber = 1;
 
+        public double DisplayWidth { get; private set; }
+        public double DisplayHeight { get; private set; }
+
         public MainPage()
         {
             this.BindingContext = new Command(async () =>
@@ -27,7 +30,6 @@ namespace XamarinTest
                 this.Articles.IsRefreshing = false;
             });
             InitializeComponent();
-            var unUsed = this.FetchArticles(this.pageNumber);
         }
 
         async Task OnClicked(object sender, EventArgs e)
@@ -43,16 +45,16 @@ namespace XamarinTest
 
         async void OnTapped(object sender, ItemTappedEventArgs e)
         {
-            var index = (Articles.ItemsSource as List<String>).IndexOf(e.Item as String);
+            var index = (Articles.ItemsSource as List<CellItem>).IndexOf(e.Item as CellItem);
             var url = articleList[index].Url;
             await Navigation.PushAsync(new ArticlePage(url));
         }
 
         async void OnLastItem(object sender, ItemVisibilityEventArgs e)
         {
-            if (articleList.Last().Title == e.Item as String)
+            var item = e.Item as CellItem;
+            if (articleList.Last().Id == item.Id)
             {
-                System.Diagnostics.Debug.WriteLine(e.Item);
                 this.pageNumber++;
                 this.Bottom.IsVisible = true;
                 await FetchArticles(this.pageNumber);
@@ -91,14 +93,36 @@ namespace XamarinTest
 
                 articleList.AddRange(newArticles);
 
-                var items = articleList.Select(a => a.Title).ToList();
+                var items = articleList.Select(a =>
+                {
+                    return new CellItem()
+                    {
+                        Id = a.Id,
+                        Title = a.Title,
+                        Url = a.Url,
+                        ProfileImageUrl = a.User.ProfileImageUrl,
+                        Username = a.User.Name,
+                        UserId = a.User.Id,
+                        IconSize = this.DisplayWidth * 0.15,
+                        CreatedAt = a.CreatedAt
+                    };
+                }).ToList();
                 this.Articles.BindingContext = items;
+                //this.Articles.BindingContext = articleList;
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Error", ex.Message, "OK");
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace);
             }
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            this.DisplayWidth = width;
+            this.DisplayHeight = height;
+            var unused = FetchArticles(this.pageNumber);
         }
 
         void Debug(object ob)

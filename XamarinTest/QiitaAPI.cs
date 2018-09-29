@@ -41,7 +41,37 @@ namespace XamarinTest
         [JsonProperty(PropertyName = "url")]
         public string Url { get; set; }
 
+        [JsonProperty(PropertyName = "created_at")]
+        public DateTime CreatedAt { get; set; }
+
         [JsonProperty(PropertyName = "body")]
         public string Body { get; set; }
+
+        [JsonProperty(PropertyName = "user")]
+        public User User { get; set; }
+
+        [JsonProperty(PropertyName = "tags")]
+        public Tag[] Tags { get; set; }
+    }
+
+    public class User
+    {
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "profile_image_url")]
+        public string ProfileImageUrl { get; set; }
+    }
+
+    public class Tag
+    {
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "versions")]
+        public string[] Versions { get; set; }
     }
 }
