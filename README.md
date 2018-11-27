@@ -1,4 +1,3 @@
 # XamarinTest
 
-My Xamarin First Application
-Use Qiita api v2.
+My Xamarin First Application Using Qiita api v2.
