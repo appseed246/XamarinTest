@@ -7,8 +7,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Name="Bar"
                      Text="更新"
-                     Command="{Binding}">
-        </ToolbarItem>
+                     Command="{Binding}"/>
     </ContentPage.ToolbarItems>
     <StackLayout VerticalOptions="FillAndExpand">
         <StackLayout.Children>

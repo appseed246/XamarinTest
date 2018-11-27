@@ -32,6 +32,12 @@ namespace XamarinTest
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 更新ボタン押下時
+        /// </summary>
+        /// <returns>The clicked.</returns>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async Task OnClicked(object sender, EventArgs e)
         {
             if (this.Articles.IsRefreshing)
@@ -43,13 +49,25 @@ namespace XamarinTest
             this.Articles.IsRefreshing = false;
         }
 
+        /// <summary>
+        /// 記事アイテムをタップした時
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void OnTapped(object sender, ItemTappedEventArgs e)
         {
             var index = (Articles.ItemsSource as List<CellItem>).IndexOf(e.Item as CellItem);
-            var url = articleList[index].Url;
-            await Navigation.PushAsync(new ArticlePage(url));
+            //var url = articleList[index].Url;
+            var body = articleList[index].Body;
+            Debug(body);
+            await Navigation.PushAsync(new ArticlePage(body));
         }
 
+        /// <summary>
+        /// 一番最後のアイテムに到達した時
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="e">E.</param>
         async void OnLastItem(object sender, ItemVisibilityEventArgs e)
         {
             var item = e.Item as CellItem;
@@ -62,7 +80,7 @@ namespace XamarinTest
             }
         }
 
-        async Task Reload(object sender, EventArgs e)
+        async void Reload(object sender, EventArgs e)
         {
             if (this.Articles.IsRefreshing)
             {

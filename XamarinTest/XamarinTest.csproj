@@ -5,14 +5,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.1.0.697729" />
+    <PackageReference Include="Xamarin.Forms" Version="3.4.0.1008975" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Markdig" Version="0.15.2" />
+    <PackageReference Include="Markdig" Version="0.15.4" />
     <PackageReference Include="Markdig.SyntaxHighlighting" Version="1.1.7" />
     <PackageReference Include="Markdown" Version="2.2.1" />
+    <PackageReference Include="AngleSharp" Version="0.9.11" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="QiitaClient.cs" />
     <Compile Remove="QiitaClass.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Assets\github-markdown.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\github-markdown.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\index.html" />
   </ItemGroup>
 </Project>

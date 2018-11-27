@@ -44,7 +44,7 @@ namespace XamarinTest
         [JsonProperty(PropertyName = "created_at")]
         public DateTime CreatedAt { get; set; }
 
-        [JsonProperty(PropertyName = "body")]
+        [JsonProperty(PropertyName = "rendered_body")]
         public string Body { get; set; }
 
         [JsonProperty(PropertyName = "user")]
